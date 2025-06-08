@@ -67,13 +67,21 @@ public class UserSettingsService {
         System.out.println(confirmationCode);
         try {
                 List<UserBudgets> userBudgets = List.of(userBudgetsRepo.getAllByUser_Email(email));
-                userBudgetsRepo.deleteAll(userBudgets);
+                if (userBudgets != null) {
+                    userBudgetsRepo.deleteAll(userBudgets);
+                }
                 List<UserTransactions> userTransactions = List.of(userTransactionsRepo.getAllByUser_Email(email));
-                userTransactionsRepo.deleteAll(userTransactions);
-                List<UserSettings> userSettings = List.of(userSettingsRepo.getUserSettingsByUserEmail(email));
-                userSettingsRepo.deleteAll(userSettings);
-                List<User> users = List.of(userRepo.getByEmail(email));
-                userRepo.deleteAll(users);
+                if (userTransactions != null) {
+                    userTransactionsRepo.deleteAll(userTransactions);
+                }
+                UserSettings userSettings = userSettingsRepo.getUserSettingsByUserEmail(email);
+                if (userSettings != null) {
+                    userSettingsRepo.delete(userSettings);
+                }
+                User users = userRepo.getByEmail(email);
+                if (users != null) {
+                    userRepo.delete(users);
+                }
                 return true;
         }
         catch(Exception ex) {
