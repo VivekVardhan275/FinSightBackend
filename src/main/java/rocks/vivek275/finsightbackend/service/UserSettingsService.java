@@ -66,43 +66,15 @@ public class UserSettingsService {
         String confirmation = confirmationCode;
         System.out.println(confirmationCode);
         try {
-            try {
                 List<UserBudgets> userBudgets = List.of(userBudgetsRepo.getAllByUser_Email(email));
-                if (userBudgets != null) {
-                    userBudgetsRepo.deleteAll(userBudgets);
-                }
-            }
-            catch(Exception ex) {
-                System.out.println("Error deleting user budgets");
-            }
-            try{
+                userBudgetsRepo.deleteAll(userBudgets);
                 List<UserTransactions> userTransactions = List.of(userTransactionsRepo.getAllByUser_Email(email));
-                if (userTransactions != null) {
-                    userTransactionsRepo.deleteAll(userTransactions);
-                }
-            }
-            catch(Exception ex) {
-                System.out.println("Error deleting user transactions");
-            }
-            try {
+                userTransactionsRepo.deleteAll(userTransactions);
                 List<UserSettings> userSettings = List.of(userSettingsRepo.getUserSettingsByUserEmail(email));
-                if (userSettings != null) {
-                    userSettingsRepo.deleteAll(userSettings);
-                }
-            }
-            catch(Exception ex) {
-                System.out.println("Error deleting user settings");
-            }
-            try {
+                userSettingsRepo.deleteAll(userSettings);
                 List<User> users = List.of(userRepo.getByEmail(email));
-                if (users != null) {
-                    userRepo.deleteAll(users);
-                }
-            }
-            catch(Exception ex) {
-                System.out.println("Error deleting user");
-            }
-            return true;
+                userRepo.deleteAll(users);
+                return true;
         }
         catch(Exception ex) {
             System.out.println("Error deleting account");
