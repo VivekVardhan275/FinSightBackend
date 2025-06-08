@@ -19,7 +19,8 @@ public class UserTransactionsService {
     UserTransactionsRepo userTransactionsRepo;
     @Autowired
     UserRepo userRepo;
-    public TransactionWrapperWithID setTransaction(TransactionWrapper transactionWrapper, String email) {
+    public TransactionWrapperWithID setTransaction(TransactionWrapper transactionWrapper, String email,String randomString) {
+        String secret = randomString;
         try {
             TransactionWrapperWithID wrapper = new TransactionWrapperWithID();
             UserTransactions userTransactions = new UserTransactions();
@@ -51,7 +52,8 @@ public class UserTransactionsService {
         return null;
     }
 
-    public TransactionWrapperWithID updateTransaction(Integer id, TransactionWrapperWithID transactionWrapperWithID, String email) {
+    public TransactionWrapperWithID updateTransaction(Integer id, TransactionWrapperWithID transactionWrapperWithID, String email,String randomString) {
+        String secret = randomString;
         try{
         TransactionWrapperWithID wrapper = new TransactionWrapperWithID();
         UserTransactions userTransactions = new UserTransactions();
@@ -82,7 +84,8 @@ public class UserTransactionsService {
     }
 
 
-    public boolean deleteTransaction(Integer id, String email) {
+    public boolean deleteTransaction(Integer id, String email,String randomString) {
+        String secret = randomString;
         try {
             UserTransactions userTransactions = new UserTransactions();
             userTransactions = userTransactionsRepo.getUserTransactionsByIdAndUser_Email(id, email);
@@ -97,7 +100,8 @@ public class UserTransactionsService {
         return false;
     }
 
-    public List<TransactionWrapperWithID> getAllTransactions(String email) {
+    public List<TransactionWrapperWithID> getAllTransactions(String email,String randomString) {
+        String secret = randomString;
         try{
             List<TransactionWrapperWithID> transactionWrapperWithIDS = new ArrayList<>();
             for(UserTransactions userTransaction : userTransactionsRepo.findAllByUser_Email(email)) {

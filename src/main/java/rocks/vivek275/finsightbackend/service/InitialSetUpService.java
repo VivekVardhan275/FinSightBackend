@@ -22,7 +22,8 @@ public class InitialSetUpService {
     @Autowired
     UserSettingsRepo userSettingsRepo;
     @Transactional
-    public ResponseEntity<String> intializeFirstSetUp(SetUpWrapper setUpWrapper) {
+    public ResponseEntity<String> intializeFirstSetUp(SetUpWrapper setUpWrapper,String randomString) {
+        String secret = randomString;
         try {
             if (userRepo.existsByEmail(setUpWrapper.getEmail())) {
                 return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);

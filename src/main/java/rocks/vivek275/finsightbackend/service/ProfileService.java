@@ -15,7 +15,8 @@ public class ProfileService {
     @Autowired
     UserRepo userRepo;
 
-    public ProfileWrapper getProfile(String email) {
+    public ProfileWrapper getProfile(String email,String randomString) {
+        String secret = randomString;
         try {
             ProfileWrapper profileWrapper = new ProfileWrapper();
 
@@ -34,7 +35,8 @@ public class ProfileService {
         return null;
     }
 
-    public boolean updateProfile(ProfileWrapper profileWrapper , String email) {
+    public boolean updateProfile(ProfileWrapper profileWrapper , String email,String randomString) {
+        String secret = randomString;
         try {
             User user = userRepo.getByEmail(email);
             if (user != null) {

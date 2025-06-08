@@ -26,24 +26,24 @@ public class UserController {
     UserBudgetsService userBudgetsService;
 
     @GetMapping("/first-check")
-    public ResponseEntity<FirstCheckWrapper> firstCheck(@RequestParam String email) {
+    public ResponseEntity<FirstCheckWrapper> firstCheck(@RequestParam String email , @RequestParam String _cb) {
 //        System.out.println(email);
         FirstCheckWrapper firstCheckWrapper = new FirstCheckWrapper();
-         boolean check =  firstCheckService.firstCheck(email);
+         boolean check =  firstCheckService.firstCheck(email,_cb);
         firstCheckWrapper.setHasCompletedSetup(check);
         return new ResponseEntity<>(firstCheckWrapper, HttpStatus.OK);
     }
 
     @PostMapping("/setup")
-    public ResponseEntity<String> setup(@RequestBody SetUpWrapper setUpWrapper) {
+    public ResponseEntity<String> setup(@RequestBody SetUpWrapper setUpWrapper, @RequestParam String _cb) {
 //            System.out.println(setUpWrapper);
-            return initialSetUpService.intializeFirstSetUp(setUpWrapper);
+            return initialSetUpService.intializeFirstSetUp(setUpWrapper,_cb);
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<ProfileWrapper> profile(@RequestParam String email) {
+    public ResponseEntity<ProfileWrapper> profile(@RequestParam String email, @RequestParam String _cb) {
         ProfileWrapper profileWrapper = new ProfileWrapper();
-        profileWrapper = profileService.getProfile(email);
+        profileWrapper = profileService.getProfile(email,_cb);
         if(profileWrapper == null) {
             return new ResponseEntity<>(profileWrapper, HttpStatus.NOT_FOUND);
         }
@@ -51,8 +51,8 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<String> updateProfile(@RequestBody ProfileWrapper profileWrapper , @RequestParam String email) {
-        boolean check = profileService.updateProfile(profileWrapper,email);
+    public ResponseEntity<String> updateProfile(@RequestBody ProfileWrapper profileWrapper , @RequestParam String email, @RequestParam String _cb) {
+        boolean check = profileService.updateProfile(profileWrapper,email,_cb);
         if(check) {
             return new ResponseEntity<>("Profile updated successfully",HttpStatus.OK);
         }
@@ -61,17 +61,17 @@ public class UserController {
         }
     }
     @GetMapping("/settings")
-    public ResponseEntity<SettingsWrapper> getSettings(@RequestParam String email) {
+    public ResponseEntity<SettingsWrapper> getSettings(@RequestParam String email, @RequestParam String _cb) {
         SettingsWrapper settingsWrapper = new SettingsWrapper();
-        settingsWrapper = userSettingsService.getUserSettings(email);
+        settingsWrapper = userSettingsService.getUserSettings(email,_cb);
         if (settingsWrapper == null) {
             return new ResponseEntity<>(settingsWrapper, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(settingsWrapper, HttpStatus.OK);
     }
     @PutMapping("/settings")
-    public ResponseEntity<String> updateSettings(@RequestBody SettingsWrapper settingsWrapper , @RequestParam String email) {
-        boolean check = userSettingsService.updateSettings(settingsWrapper,email);
+    public ResponseEntity<String> updateSettings(@RequestBody SettingsWrapper settingsWrapper , @RequestParam String email, @RequestParam String _cb) {
+        boolean check = userSettingsService.updateSettings(settingsWrapper,email,_cb);
         if(check) {
             return new ResponseEntity<>("Settings updated successfully",HttpStatus.OK);
         }
@@ -81,8 +81,8 @@ public class UserController {
     }
 
     @DeleteMapping("/account/delete")
-    public ResponseEntity<String> deleteAccount(@RequestParam String email ,@RequestParam String confirmationCode ) {
-        boolean check = userSettingsService.deleteAccount(email,confirmationCode);
+    public ResponseEntity<String> deleteAccount(@RequestParam String email ,@RequestParam String confirmationCode, @RequestParam String _cb ) {
+        boolean check = userSettingsService.deleteAccount(email,confirmationCode,_cb);
         if(check) {
             return new ResponseEntity<>("Account deleted successfully",HttpStatus.OK);
         }
@@ -92,17 +92,17 @@ public class UserController {
     }
 
     @GetMapping("/budgets")
-    public ResponseEntity<List<BudgetWrapperWithID>> getBudgets(@RequestParam String email) {
-        List<BudgetWrapperWithID> budgets = userBudgetsService.getBudgets(email);
+    public ResponseEntity<List<BudgetWrapperWithID>> getBudgets(@RequestParam String email, @RequestParam String _cb) {
+        List<BudgetWrapperWithID> budgets = userBudgetsService.getBudgets(email,_cb);
         if(budgets == null) {
             return new ResponseEntity<>(budgets, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(budgets, HttpStatus.OK);
     }
     @PostMapping("/budgets")
-    public ResponseEntity<BudgetWrapperWithID> setBudget(@RequestBody BudgetWrapper budgetWrapper , @RequestParam String email) {
+    public ResponseEntity<BudgetWrapperWithID> setBudget(@RequestBody BudgetWrapper budgetWrapper , @RequestParam String email, @RequestParam String _cb) {
         BudgetWrapperWithID budgetWrapperWithID = new BudgetWrapperWithID();
-        budgetWrapperWithID = userBudgetsService.setBudget(budgetWrapper,email);
+        budgetWrapperWithID = userBudgetsService.setBudget(budgetWrapper,email,_cb);
         if (budgetWrapper != null) {
             return new ResponseEntity<>(budgetWrapperWithID, HttpStatus.OK);
         }
@@ -110,9 +110,9 @@ public class UserController {
     }
 
     @PutMapping("/budgets/{id}")
-    public ResponseEntity<BudgetWrapperWithID> updateBudget( @PathVariable Integer id, @RequestBody BudgetWrapperWithID budgetWrapperWithID , @RequestParam String email) {
+    public ResponseEntity<BudgetWrapperWithID> updateBudget( @PathVariable Integer id, @RequestBody BudgetWrapperWithID budgetWrapperWithID , @RequestParam String email, @RequestParam String _cb) {
         BudgetWrapperWithID updatedBudgetWrapperWithID = new BudgetWrapperWithID();
-        updatedBudgetWrapperWithID = userBudgetsService.updateBudget(id, budgetWrapperWithID,email);
+        updatedBudgetWrapperWithID = userBudgetsService.updateBudget(id, budgetWrapperWithID,email,_cb);
         if (updatedBudgetWrapperWithID != null) {
             return new ResponseEntity<>(updatedBudgetWrapperWithID, HttpStatus.OK);
         }
@@ -120,8 +120,8 @@ public class UserController {
     }
 
     @DeleteMapping("/budgets/{id}")
-    public ResponseEntity<String> deleteBudget(@PathVariable Integer id, @RequestParam String email) {
-        boolean check = userBudgetsService.deleteBudget(id,email);
+    public ResponseEntity<String> deleteBudget(@PathVariable Integer id, @RequestParam String email, @RequestParam String _cb) {
+        boolean check = userBudgetsService.deleteBudget(id,email,_cb);
         if(check) {
             return new ResponseEntity<>("Budget deleted successfully",HttpStatus.OK);
         }
@@ -131,8 +131,8 @@ public class UserController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<TransactionWrapperWithID>> getTransactions(@RequestParam String email) {
-        List<TransactionWrapperWithID> transactionWrappersWithID = userTransactionsService.getAllTransactions(email);
+    public ResponseEntity<List<TransactionWrapperWithID>> getTransactions(@RequestParam String email, @RequestParam String _cb) {
+        List<TransactionWrapperWithID> transactionWrappersWithID = userTransactionsService.getAllTransactions(email,_cb);
         if(transactionWrappersWithID == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -140,9 +140,9 @@ public class UserController {
     }
 
     @PutMapping("/transactions/{id}")
-    public ResponseEntity<TransactionWrapperWithID> updateTransaction(@PathVariable Integer id , @RequestBody TransactionWrapperWithID transactionWrapperWithID, @RequestParam String email) {
+    public ResponseEntity<TransactionWrapperWithID> updateTransaction(@PathVariable Integer id , @RequestBody TransactionWrapperWithID transactionWrapperWithID, @RequestParam String email, @RequestParam String _cb) {
         TransactionWrapperWithID updatedTransactionWrapperWithID = new TransactionWrapperWithID();
-        updatedTransactionWrapperWithID = userTransactionsService.updateTransaction(id,transactionWrapperWithID,email);
+        updatedTransactionWrapperWithID = userTransactionsService.updateTransaction(id,transactionWrapperWithID,email,_cb);
         if (updatedTransactionWrapperWithID != null) {
             return new ResponseEntity<>(updatedTransactionWrapperWithID, HttpStatus.OK);
         }
@@ -152,8 +152,8 @@ public class UserController {
     }
 
     @DeleteMapping("/transactions/{id}")
-    public ResponseEntity<String> deleteTransaction(@PathVariable Integer id, @RequestParam String email) {
-        boolean check = userTransactionsService.deleteTransaction(id,email);
+    public ResponseEntity<String> deleteTransaction(@PathVariable Integer id, @RequestParam String email, @RequestParam String _cb) {
+        boolean check = userTransactionsService.deleteTransaction(id,email,_cb);
         if(check) {
             return new ResponseEntity<>("Transaction deleted successfully",HttpStatus.OK);
         }
@@ -163,9 +163,9 @@ public class UserController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<TransactionWrapperWithID> setTransaction(@RequestBody TransactionWrapper transactionWrapper , @RequestParam String email) {
+    public ResponseEntity<TransactionWrapperWithID> setTransaction(@RequestBody TransactionWrapper transactionWrapper , @RequestParam String email, @RequestParam String _cb) {
         TransactionWrapperWithID transactionWrapperWithID = new TransactionWrapperWithID();
-        transactionWrapperWithID = userTransactionsService.setTransaction(transactionWrapper, email);
+        transactionWrapperWithID = userTransactionsService.setTransaction(transactionWrapper, email,_cb);
         if (transactionWrapperWithID != null) {
             return new ResponseEntity<>(transactionWrapperWithID, HttpStatus.OK);
         }

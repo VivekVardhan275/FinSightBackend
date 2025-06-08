@@ -22,7 +22,8 @@ public class UserBudgetsService {
     @Autowired
     UserRepo userRepo;
 
-    public BudgetWrapperWithID setBudget(BudgetWrapper budgetWrapper, String email) {
+    public BudgetWrapperWithID setBudget(BudgetWrapper budgetWrapper, String email , String randomString) {
+        String secret = randomString;
         try {
             BudgetWrapperWithID wrapper = new BudgetWrapperWithID();
             UserBudgets userBudgets = new UserBudgets();
@@ -46,7 +47,8 @@ public class UserBudgetsService {
         return null;
     }
 
-    public BudgetWrapperWithID updateBudget(Integer id , BudgetWrapperWithID budgetWrapperWithID ,String email) {
+    public BudgetWrapperWithID updateBudget(Integer id , BudgetWrapperWithID budgetWrapperWithID ,String email ,String randomString) {
+        String secret = randomString;
         try{
             BudgetWrapperWithID wrapper = new BudgetWrapperWithID();
             UserBudgets userBudgets = userBudgetsRepo.getUserBudgetsByIdAndUser_Email(id, email);
@@ -67,7 +69,8 @@ public class UserBudgetsService {
         return null;
     }
 
-    public boolean deleteBudget(Integer id, String email) {
+    public boolean deleteBudget(Integer id, String email,String randomString) {
+        String secret = randomString;
         try{
             UserBudgets userBudgets = new UserBudgets();
             userBudgets = userBudgetsRepo.getUserBudgetsByIdAndUser_Email(id, email);
@@ -80,7 +83,8 @@ public class UserBudgetsService {
         return false;
     }
 
-    public List<BudgetWrapperWithID> getBudgets(String email) {
+    public List<BudgetWrapperWithID> getBudgets(String email,String randomString) {
+        String secret = randomString;
         try{
             List<BudgetWrapperWithID> getAllUserBudgets = new ArrayList<>();
             for(UserBudgets userBudgets : userBudgetsRepo.getAllByUser_Email(email)){

@@ -9,8 +9,9 @@ import rocks.vivek275.finsightbackend.repo.UserRepo;
 public class FirstCheckService {
     @Autowired
     UserRepo userRepo;
-    public boolean firstCheck(String email) {
+    public boolean firstCheck(String email , String randomString) {
         try {
+            String secret = randomString;
             User user = userRepo.getByEmail(email);
             System.out.println(user);
             if (user == null) {

@@ -22,7 +22,8 @@ public class UserSettingsService {
     UserTransactionsRepo userTransactionsRepo;
     @Autowired
     UserBudgetsRepo userBudgetsRepo;
-    public SettingsWrapper getUserSettings(String email) {
+    public SettingsWrapper getUserSettings(String email,String randomString) {
+        String secret = randomString;
         try {
 
         SettingsWrapper settings = new SettingsWrapper();
@@ -40,7 +41,8 @@ public class UserSettingsService {
         return null;
     }
 
-    public boolean updateSettings(SettingsWrapper settingsWrapper, String email) {
+    public boolean updateSettings(SettingsWrapper settingsWrapper, String email,String randomString) {
+        String secret = randomString;
         try {
             UserSettings userSettings = userSettingsRepo.getUserSettingsByUserEmail(email);
             if (userSettings != null) {
@@ -59,7 +61,8 @@ public class UserSettingsService {
         return false;
     }
 
-    public boolean deleteAccount(String email, String confirmationCode) {
+    public boolean deleteAccount(String email, String confirmationCode,String randomString) {
+        String secret = randomString;
         String confirmation = confirmationCode;
         System.out.println(confirmationCode);
         try {
