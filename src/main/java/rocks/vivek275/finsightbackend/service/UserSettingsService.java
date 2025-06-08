@@ -61,32 +61,30 @@ public class UserSettingsService {
         return false;
     }
 
-    public boolean deleteAccount(String email, String confirmationCode,String randomString) {
-        String secret = randomString;
-        String confirmation = confirmationCode;
-        System.out.println(confirmationCode);
+    public boolean deleteAccount(String email, String confirmationCode, String randomString) {
         try {
-                List<UserBudgets> userBudgets = List.of(userBudgetsRepo.getAllByUser_Email(email));
-                if (userBudgets != null) {
-                    userBudgetsRepo.deleteAll(userBudgets);
-                }
-                List<UserTransactions> userTransactions = List.of(userTransactionsRepo.getAllByUser_Email(email));
-                if (userTransactions != null) {
-                    userTransactionsRepo.deleteAll(userTransactions);
-                }
-                UserSettings userSettings = userSettingsRepo.getUserSettingsByUserEmail(email);
-                if (userSettings != null) {
-                    userSettingsRepo.delete(userSettings);
-                }
-                User users = userRepo.getByEmail(email);
-                if (users != null) {
-                    userRepo.delete(users);
-                }
-                return true;
+            User user = userRepo.getByEmail(email);
+            List<UserBudgets> userBudgets = userBudgetsRepo.getAllByUser(user);
+            if (userBudgets != null && !userBudgets.isEmpty()) {
+                userBudgetsRepo.deleteAll(userBudgets);
+            }
+            List<UserTransactions> userTransactions = userTransactionsRepo.getAllByUser(user);
+            if (userTransactions != null && !userTransactions.isEmpty()) {
+                userTransactionsRepo.deleteAll(userTransactions);
+            }
+            UserSettings userSettings = userSettingsRepo.getUserSettingsByUserEmail(email);
+            if (userSettings != null) {
+                userSettingsRepo.delete(userSettings);
+            }
+            User users = userRepo.getByEmail(email);
+            if (users != null) {
+                userRepo.delete(user);
+            }
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Error deleting account: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
         }
-        catch(Exception ex) {
-            System.out.println("Error deleting account");
-        }
-        return false;
     }
 }
