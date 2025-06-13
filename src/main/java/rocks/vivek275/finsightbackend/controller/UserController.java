@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import rocks.vivek275.finsightbackend.model.*;
 import rocks.vivek275.finsightbackend.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,8 @@ public class UserController {
     UserTransactionsService userTransactionsService;
     @Autowired
     UserBudgetsService userBudgetsService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/first-check")
     public ResponseEntity<FirstCheckWrapper> firstCheck(@RequestParam String email , @RequestParam String _cb) {
@@ -91,6 +94,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users")
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        users = userService.findAllUsers();
+        return users;
+    }
     @GetMapping("/budgets")
     public ResponseEntity<List<BudgetWrapperWithID>> getBudgets(@RequestParam String email, @RequestParam String _cb) {
         List<BudgetWrapperWithID> budgets = userBudgetsService.getBudgets(email,_cb);
